@@ -1,0 +1,364 @@
+{
+  "yearlyStats": [
+    {
+      "year": 1950,
+      "count": 16,
+      "maxWind": 125
+    },
+    {
+      "year": 1951,
+      "count": 12,
+      "maxWind": 130
+    },
+    {
+      "year": 1952,
+      "count": 11,
+      "maxWind": 125
+    },
+    {
+      "year": 1953,
+      "count": 14,
+      "maxWind": 140
+    },
+    {
+      "year": 1954,
+      "count": 16,
+      "maxWind": 115
+    },
+    {
+      "year": 1955,
+      "count": 14,
+      "maxWind": 150
+    },
+    {
+      "year": 1956,
+      "count": 12,
+      "maxWind": 105
+    },
+    {
+      "year": 1957,
+      "count": 8,
+      "maxWind": 120
+    },
+    {
+      "year": 1958,
+      "count": 12,
+      "maxWind": 130
+    },
+    {
+      "year": 1959,
+      "count": 14,
+      "maxWind": 115
+    },
+    {
+      "year": 1960,
+      "count": 8,
+      "maxWind": 125
+    },
+    {
+      "year": 1961,
+      "count": 11,
+      "maxWind": 150
+    },
+    {
+      "year": 1962,
+      "count": 5,
+      "maxWind": 100
+    },
+    {
+      "year": 1963,
+      "count": 9,
+      "maxWind": 125
+    },
+    {
+      "year": 1964,
+      "count": 12,
+      "maxWind": 135
+    },
+    {
+      "year": 1965,
+      "count": 6,
+      "maxWind": 135
+    },
+    {
+      "year": 1966,
+      "count": 11,
+      "maxWind": 130
+    },
+    {
+      "year": 1967,
+      "count": 8,
+      "maxWind": 140
+    },
+    {
+      "year": 1968,
+      "count": 14,
+      "maxWind": 75
+    },
+    {
+      "year": 1969,
+      "count": 29,
+      "maxWind": 150
+    },
+    {
+      "year": 1970,
+      "count": 19,
+      "maxWind": 110
+    },
+    {
+      "year": 1971,
+      "count": 22,
+      "maxWind": 140
+    },
+    {
+      "year": 1972,
+      "count": 19,
+      "maxWind": 90
+    },
+    {
+      "year": 1973,
+      "count": 17,
+      "maxWind": 100
+    },
+    {
+      "year": 1974,
+      "count": 20,
+      "maxWind": 130
+    },
+    {
+      "year": 1975,
+      "count": 23,
+      "maxWind": 120
+    },
+    {
+      "year": 1976,
+      "count": 21,
+      "maxWind": 105
+    },
+    {
+      "year": 1977,
+      "count": 15,
+      "maxWind": 150
+    },
+    {
+      "year": 1978,
+      "count": 24,
+      "maxWind": 120
+    },
+    {
+      "year": 1979,
+      "count": 20,
+      "maxWind": 150
+    },
+    {
+      "year": 1980,
+      "count": 18,
+      "maxWind": 165
+    },
+    {
+      "year": 1981,
+      "count": 22,
+      "maxWind": 115
+    },
+    {
+      "year": 1982,
+      "count": 8,
+      "maxWind": 115
+    },
+    {
+      "year": 1983,
+      "count": 6,
+      "maxWind": 100
+    },
+    {
+      "year": 1984,
+      "count": 20,
+      "maxWind": 115
+    },
+    {
+      "year": 1985,
+      "count": 14,
+      "maxWind": 125
+    },
+    {
+      "year": 1986,
+      "count": 10,
+      "maxWind": 90
+    },
+    {
+      "year": 1987,
+      "count": 14,
+      "maxWind": 110
+    },
+    {
+      "year": 1988,
+      "count": 19,
+      "maxWind": 160
+    },
+    {
+      "year": 1989,
+      "count": 15,
+      "maxWind": 140
+    },
+    {
+      "year": 1990,
+      "count": 16,
+      "maxWind": 105
+    },
+    {
+      "year": 1991,
+      "count": 12,
+      "maxWind": 115
+    },
+    {
+      "year": 1992,
+      "count": 10,
+      "maxWind": 150
+    },
+    {
+      "year": 1993,
+      "count": 10,
+      "maxWind": 100
+    },
+    {
+      "year": 1994,
+      "count": 12,
+      "maxWind": 95
+    },
+    {
+      "year": 1995,
+      "count": 21,
+      "maxWind": 130
+    },
+    {
+      "year": 1996,
+      "count": 13,
+      "maxWind": 125
+    },
+    {
+      "year": 1997,
+      "count": 9,
+      "maxWind": 110
+    },
+    {
+      "year": 1998,
+      "count": 14,
+      "maxWind": 155
+    },
+    {
+      "year": 1999,
+      "count": 16,
+      "maxWind": 135
+    },
+    {
+      "year": 2000,
+      "count": 19,
+      "maxWind": 120
+    },
+    {
+      "year": 2001,
+      "count": 17,
+      "maxWind": 125
+    },
+    {
+      "year": 2002,
+      "count": 14,
+      "maxWind": 125
+    },
+    {
+      "year": 2003,
+      "count": 21,
+      "maxWind": 145
+    },
+    {
+      "year": 2004,
+      "count": 16,
+      "maxWind": 145
+    },
+    {
+      "year": 2005,
+      "count": 31,
+      "maxWind": 160
+    },
+    {
+      "year": 2006,
+      "count": 11,
+      "maxWind": 105
+    },
+    {
+      "year": 2007,
+      "count": 17,
+      "maxWind": 150
+    },
+    {
+      "year": 2008,
+      "count": 17,
+      "maxWind": 135
+    },
+    {
+      "year": 2009,
+      "count": 11,
+      "maxWind": 115
+    },
+    {
+      "year": 2010,
+      "count": 21,
+      "maxWind": 135
+    },
+    {
+      "year": 2011,
+      "count": 20,
+      "maxWind": 120
+    },
+    {
+      "year": 2012,
+      "count": 19,
+      "maxWind": 100
+    },
+    {
+      "year": 2013,
+      "count": 15,
+      "maxWind": 80
+    },
+    {
+      "year": 2014,
+      "count": 9,
+      "maxWind": 125
+    },
+    {
+      "year": 2015,
+      "count": 12,
+      "maxWind": 135
+    }
+  ],
+  "categoryDistribution": [
+    {
+      "category": "Cat1",
+      "count": 415
+    },
+    {
+      "category": "Cat2",
+      "count": 241
+    },
+    {
+      "category": "Cat3",
+      "count": 163
+    },
+    {
+      "category": "Cat4",
+      "count": 93
+    },
+    {
+      "category": "Cat5",
+      "count": 22
+    },
+    {
+      "category": "TD",
+      "count": 944
+    },
+    {
+      "category": "TS",
+      "count": 766
+    }
+  ]
+}
