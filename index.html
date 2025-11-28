@@ -52,11 +52,12 @@
 
       <div class="viz-row">
         <div class="viz-container">
-          <h2>Hurricanes per Year</h2>
+          <h2 id = "#timelineTitle">Hurricanes per Year</h2>
           <label for="timelineMetric">Show:</label>
+          <label for="timelineMetric">Metric:</label>
           <select id="timelineMetric">
-            <option value="count" selected>Number of Hurricanes</option>
-            <option value="major">Number of Major Hurricanes (Cat 3+)</option>
+            <option value="count" selected>Total Storms</option>
+            <option value="major">Major Hurricanes (Cat 3–5)</option>
           </select>
           <svg id="timeline"></svg>
         </div>
