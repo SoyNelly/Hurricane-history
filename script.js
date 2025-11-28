@@ -158,24 +158,11 @@ function updateTimeline() {
   svg.selectAll("*").remove();
   svg.attr("viewBox", `0 0 ${width} ${height}`);
   
-  //get data option from dropdown menu and set values for y axis title
-  const count_t = d3.select("#timelineMetric").property("value");
 
-  const titles = {
-    count: "Hurricanes Per Year",
-    major: "Major Hurricanes (Cat 3+) Per Year"
-  };
-
-  //further filter data to get specific attribute asked for
-  const count_filtered = filteredHurricanes.filter(d =>{
-    if(count_t == "count"){return true;}
-    if(count_t == "major"){return d.category[3] >= 3;}
-    return true;
-  });
 
   // Aggregate data by year
   const yearCounts = d3.rollup(
-    count_filtered,
+    hurricanesFiltered,
     v => v.length,
     d => d.year
   );
@@ -239,7 +226,7 @@ function updateTimeline() {
     .attr("x", -height / 2)
     .attr("y", 15)
     .attr("text-anchor", "middle")
-    .text(titles[count_t]);
+    .text("Hurricanes Per Year);
 }
 
 // CATEGORY DISTRIBUTION CHART
