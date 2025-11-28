@@ -158,16 +158,13 @@ function updateTimeline() {
   svg.selectAll("*").remove();
   svg.attr("viewBox", `0 0 ${width} ${height}`);
   
-
-
   // Aggregate data by year
   const yearCounts = d3.rollup(
-    hurricanesFiltered,
+    filteredHurricanes,
     v => v.length,
     d => d.year
   );
   
-
   const data = Array.from(yearCounts, ([year, count]) => ({year, count}))
     .sort((a, b) => a.year - b.year);
   
@@ -226,7 +223,7 @@ function updateTimeline() {
     .attr("x", -height / 2)
     .attr("y", 15)
     .attr("text-anchor", "middle")
-    .text("Hurricanes Per Year);
+    .text("Number of Hurricanes");
 }
 
 // CATEGORY DISTRIBUTION CHART
@@ -341,7 +338,6 @@ function setupControls() {
     d3.selectAll(".cat-filter").property("checked", true);
     updateFilters();
   });
-  d3.select("#timelineMetric").on("change",updateTimeline)
 }
 
 function updateFilters() {
