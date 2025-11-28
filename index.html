@@ -1,22 +1,25 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
+<head>
+<meta charset="UTF-8" />
+    <title>Simple Map</title>
     <title>Atlantic Hurricane History (1950-2015)</title>
 
-    <!-- D3 -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+<!-- D3 -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
 
-    <!-- CSS -->
+<!-- CSS -->
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="styles.css">
-  </head>
+</head>
 
-  <body>
+<body>
+    <h1>Simple Hurricane Map Placeholder</h1>
     <header>
       <h1>Atlantic Hurricane History Dashboard</h1>
       <p class="subtitle">Visualizing 989 Atlantic Hurricanes from 1950-2015 | Data: NOAA Hurricane Database</p>
     </header>
 
+    <svg id="map"></svg>
     <div class="controls">
       <div class="control-group">
         <label for="yearRange">Year Range:</label>
@@ -65,6 +68,5 @@
 
     <div class="tooltip" id="tooltip"></div>
 
-    <script src="script.js"></script>
-  </body>
-</html>
+<script src="script.js"></script>
+</body>
