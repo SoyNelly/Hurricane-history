@@ -1,72 +1,45 @@
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8" />
-    <title>Simple Map</title>
+  <head>
+    <meta charset="UTF-8" />
     <title>Atlantic Hurricane History (1950-2015)</title>
-
-<!-- D3 -->
-<script src="https://d3js.org/d3.v7.min.js"></script>
-
-<!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="stylesheet" href="styles.css">
-</head>
+  </head>
 
-<body>
-    <h1>Simple Hurricane Map Placeholder</h1>
-    <header>
-      <h1>Atlantic Hurricane History Dashboard</h1>
-      <p class="subtitle">Visualizing 989 Atlantic Hurricanes from 1950-2015 | Data: NOAA Hurricane Database</p>
-    </header>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Atlantic Hurricane Analysis</h1>
+        <p class="subtitle">1950-2015 • NOAA Hurricane Database</p>
+      </header>
 
-    <svg id="map"></svg>
-    <div class="controls">
-      <div class="control-group">
-        <label for="yearRange">Year Range:</label>
-        <input type="range" id="yearStart" min="1950" max="2015" value="1950">
-        <span id="yearStartLabel">1950</span>
-        <span> - </span>
-        <input type="range" id="yearEnd" min="1950" max="2015" value="2015">
-        <span id="yearEndLabel">2015</span>
-      </div>
-      
-      <div class="control-group">
-        <label>Category Filter:</label>
-        <div class="category-filters">
-          <label><input type="checkbox" class="cat-filter" value="TD" checked> TD</label>
-          <label><input type="checkbox" class="cat-filter" value="TS" checked> TS</label>
-          <label><input type="checkbox" class="cat-filter" value="Cat1" checked> Cat 1</label>
-          <label><input type="checkbox" class="cat-filter" value="Cat2" checked> Cat 2</label>
-          <label><input type="checkbox" class="cat-filter" value="Cat3" checked> Cat 3</label>
-          <label><input type="checkbox" class="cat-filter" value="Cat4" checked> Cat 4</label>
-          <label><input type="checkbox" class="cat-filter" value="Cat5" checked> Cat 5</label>
-        </div>
-      </div>
-
-      <button id="resetBtn">Reset Filters</button>
-    </div>
-
-    <div class="dashboard">
-      <div class="viz-container">
-        <h2>Hurricane Tracks Map</h2>
-        <svg id="map"></svg>
-        <div class="legend" id="mapLegend"></div>
-      </div>
-
-      <div class="viz-row">
-        <div class="viz-container">
-          <h2>Hurricanes per Year</h2>
-          <svg id="timeline"></svg>
+      <div class="dashboard">
+        <div class="main-viz">
+          <div class="viz-header">
+            <h2>Hurricane Tracks</h2>
+            <div class="legend" id="mapLegend"></div>
+          </div>
+          <svg id="map"></svg>
         </div>
 
-        <div class="viz-container">
-          <h2>Category Distribution</h2>
-          <svg id="categoryChart"></svg>
+        <div class="side-panel">
+          <div class="viz-container">
+            <h3>Temporal Distribution</h3>
+            <p class="hint">Brush to filter years</p>
+            <svg id="timeline"></svg>
+          </div>
+
+          <div class="viz-container">
+            <h3>Intensity Distribution</h3>
+            <p class="hint">Click to toggle categories</p>
+            <svg id="categoryChart"></svg>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="tooltip" id="tooltip"></div>
-
-<script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
+</html>

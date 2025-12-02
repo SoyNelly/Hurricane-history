@@ -1,12 +1,16 @@
-// ATLANTIC HURRICANE VISUALIZATION DASHBOARD
+﻿// ATLANTIC HURRICANE VISUALIZATION DASHBOARD
+
 
 // Global state
 let allHurricanes = [];
 let summaryData = {};
-let filteredHurricanes = [];
 let worldData = null;
 
-// Category colors (using the Saffir-Simpson scale)
+// Filter state (controlled by visualizations)
+let selectedYears = [1950, 2015];
+let selectedCategories = new Set(['TD', 'TS', 'Cat1', 'Cat2', 'Cat3', 'Cat4', 'Cat5']);
+
+// Category colors
 const categoryColors = {
   'TD': '#74b9ff',
   'TS': '#0984e3',
@@ -29,36 +33,45 @@ Promise.all([
   allHurricanes = hurricaneData.hurricanes;
   summaryData = summary;
   worldData = world;
-  filteredHurricanes = [...allHurricanes];
   
   console.log(`Loaded ${allHurricanes.length} hurricanes`);
   
-  // Initialize visualizations
+  // Initialize all visualizations
   initializeMap();
   initializeTimeline();
   initializeCategoryChart();
-  
-  // Setup interactions
-  setupControls();
   
 }).catch(err => {
   console.error("Error loading data:", err);
   document.body.innerHTML += `<div style="color: red; padding: 20px;">Error loading data: ${err.message}</div>`;
 });
 
+// FILTER FUNCTION
+
+function getFilteredHurricanes() {
+  return allHurricanes.filter(h => 
+    h.year >= selectedYears[0] && 
+    h.year <= selectedYears[1] &&
+    selectedCategories.has(h.category)
+  );
+}
+
 // MAP VISUALIZATION
 
 function initializeMap() {
+  updateMap();
+  createMapLegend();
+}
+
+function updateMap() {
   const svg = d3.select("#map");
-  const width = svg.node().getBoundingClientRect().width;
-  const height = 500;
+  const container = svg.node().parentElement;
+  const width = container.clientWidth - 30;
+  const height = container.clientHeight - 80;
   
+  svg.selectAll("*").remove();
   svg.attr("viewBox", `0 0 ${width} ${height}`);
   
-  // Clear existing content
-  svg.selectAll("*").remove();
-  
-  // Map projection
   const projection = d3.geoMercator()
     .center([-60, 25])
     .scale(width / 4)
@@ -78,32 +91,12 @@ function initializeMap() {
     .attr("stroke-width", 0.5);
   
   // Draw hurricane tracks
-  updateMap();
-  
-  // Create legend
-  createMapLegend();
-}
-
-function updateMap() {
-  const svg = d3.select("#map");
-  const width = svg.node().getBoundingClientRect().width;
-  const height = 500;
-  
-  const projection = d3.geoMercator()
-    .center([-60, 25])
-    .scale(width / 4)
-    .translate([width / 2, height / 2]);
-  
-  // Remove existing tracks
-  svg.selectAll(".hurricane-track").remove();
-  
-  // Sampling tracks if too many (for performance)
+  const filteredHurricanes = getFilteredHurricanes();
   const maxTracks = 200;
   const sampled = filteredHurricanes.length > maxTracks 
     ? filteredHurricanes.filter((_, i) => i % Math.ceil(filteredHurricanes.length / maxTracks) === 0)
     : filteredHurricanes;
   
-  // Draw tracks
   const line = d3.line()
     .x(d => projection([d.lon, d.lat])[0])
     .y(d => projection([d.lon, d.lat])[1]);
@@ -116,12 +109,7 @@ function updateMap() {
     .attr("d", d => line(d.track))
     .attr("stroke", d => categoryColors[d.category])
     .on("mouseover", function(event, d) {
-      showTooltip(event, `
-        <strong>${d.name}</strong><br>
-        Year: ${d.year}<br>
-        Category: ${d.category}<br>
-        Max Wind: ${d.maxWind} knots
-      `);
+      showTooltip(event, `<strong>${d.name}</strong><br>Year: ${d.year}<br>Category: ${d.category}<br>Max Wind: ${d.maxWind} knots`);
       d3.select(this).style("opacity", 1).style("stroke-width", 3);
     })
     .on("mouseout", function() {
@@ -143,7 +131,10 @@ function createMapLegend() {
   });
 }
 
-// TIMELINE VISUALIZATION
+// TIMELINE WITH BRUSHING
+
+let timelineBrush = null;
+let timelineXScale = null;
 
 function initializeTimeline() {
   updateTimeline();
@@ -151,16 +142,19 @@ function initializeTimeline() {
 
 function updateTimeline() {
   const svg = d3.select("#timeline");
-  const width = svg.node().getBoundingClientRect().width;
-  const height = 300;
-  const margin = {top: 20, right: 30, bottom: 50, left: 60};
+  const container = svg.node().parentElement;
+  const width = container.clientWidth - 30;
+  const height = container.clientHeight - 60;
+  const margin = {top: 10, right: 20, bottom: 40, left: 50};
   
   svg.selectAll("*").remove();
   svg.attr("viewBox", `0 0 ${width} ${height}`);
   
-  // Aggregate data by year
+  // Get ALL data (not filtered by year, but by category)
+  const filteredByCategory = allHurricanes.filter(h => selectedCategories.has(h.category));
+  
   const yearCounts = d3.rollup(
-    filteredHurricanes,
+    filteredByCategory,
     v => v.length,
     d => d.year
   );
@@ -169,7 +163,7 @@ function updateTimeline() {
     .sort((a, b) => a.year - b.year);
   
   // Scales
-  const x = d3.scaleBand()
+  timelineXScale = d3.scaleBand()
     .domain(data.map(d => d.year))
     .range([margin.left, width - margin.right])
     .padding(0.2);
@@ -185,26 +179,25 @@ function updateTimeline() {
     .enter()
     .append("rect")
     .attr("class", "bar")
-    .attr("x", d => x(d.year))
+    .attr("x", d => timelineXScale(d.year))
     .attr("y", d => y(d.count))
-    .attr("width", x.bandwidth())
+    .attr("width", timelineXScale.bandwidth())
     .attr("height", d => height - margin.bottom - y(d.count))
-    .attr("fill", "#3498db")
+    .attr("fill", d => {
+      // Highlight bars in selected range
+      return (d.year >= selectedYears[0] && d.year <= selectedYears[1]) ? "#3498db" : "#bdc3c7";
+    })
     .on("mouseover", function(event, d) {
       showTooltip(event, `Year: ${d.year}<br>Hurricanes: ${d.count}`);
-      d3.select(this).attr("fill", "#e74c3c");
     })
-    .on("mouseout", function() {
-      hideTooltip();
-      d3.select(this).attr("fill", "#3498db");
-    });
+    .on("mouseout", hideTooltip);
   
   // X Axis
   const xAxis = svg.append("g")
     .attr("class", "axis")
     .attr("transform", `translate(0,${height - margin.bottom})`)
-    .call(d3.axisBottom(x)
-      .tickValues(x.domain().filter((d, i) => i % 5 === 0)));
+    .call(d3.axisBottom(timelineXScale)
+      .tickValues(timelineXScale.domain().filter((d, i) => i % 5 === 0)));
   
   xAxis.selectAll("text")
     .attr("transform", "rotate(-45)")
@@ -223,10 +216,52 @@ function updateTimeline() {
     .attr("x", -height / 2)
     .attr("y", 15)
     .attr("text-anchor", "middle")
-    .text("Number of Hurricanes");
+    .text("Count");
+  
+  // ADD BRUSH
+  timelineBrush = d3.brushX()
+    .extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]])
+    .on("end", brushed);
+  
+  svg.append("g")
+    .attr("class", "brush")
+    .call(timelineBrush);
+  
+  // Set initial brush
+  const x1 = timelineXScale(selectedYears[0]);
+  const x2 = timelineXScale(selectedYears[1]) + timelineXScale.bandwidth();
+  svg.select(".brush").call(timelineBrush.move, [x1, x2]);
 }
 
-// CATEGORY DISTRIBUTION CHART
+function brushed(event) {
+  if (!event.selection) return;
+  
+  const [x0, x1] = event.selection;
+  
+  // Find years in brush range
+  const years = timelineXScale.domain().filter(year => {
+    const xPos = timelineXScale(year) + timelineXScale.bandwidth() / 2;
+    return xPos >= x0 && xPos <= x1;
+  });
+  
+  if (years.length > 0) {
+    selectedYears = [Math.min(...years), Math.max(...years)];
+    console.log(`Brushed years: ${selectedYears[0]} - ${selectedYears[1]}`);
+    
+    // Update other visualizations
+    updateMap();
+    updateCategoryChart();
+    
+    // Update bar colors
+    d3.select("#timeline").selectAll(".bar")
+      .attr("fill", d => {
+        return (d.year >= selectedYears[0] && d.year <= selectedYears[1]) ? "#3498db" : "#bdc3c7";
+      });
+  }
+}
+
+// CATEGORY CHART WITH CLICK TO TOGGLE
+
 
 function initializeCategoryChart() {
   updateCategoryChart();
@@ -234,23 +269,29 @@ function initializeCategoryChart() {
 
 function updateCategoryChart() {
   const svg = d3.select("#categoryChart");
-  const width = svg.node().getBoundingClientRect().width;
-  const height = 300;
-  const margin = {top: 20, right: 30, bottom: 50, left: 60};
+  const container = svg.node().parentElement;
+  const width = container.clientWidth - 30;
+  const height = container.clientHeight - 60;
+  const margin = {top: 10, right: 20, bottom: 40, left: 50};
   
   svg.selectAll("*").remove();
   svg.attr("viewBox", `0 0 ${width} ${height}`);
   
-  // Aggregate data by category
+  // Filter by year only
+  const filteredByYear = allHurricanes.filter(h => 
+    h.year >= selectedYears[0] && h.year <= selectedYears[1]
+  );
+  
   const categoryCounts = d3.rollup(
-    filteredHurricanes,
+    filteredByYear,
     v => v.length,
     d => d.category
   );
   
   const data = categoryOrder.map(cat => ({
     category: cat,
-    count: categoryCounts.get(cat) || 0
+    count: categoryCounts.get(cat) || 0,
+    selected: selectedCategories.has(cat)
   }));
   
   // Scales
@@ -264,7 +305,7 @@ function updateCategoryChart() {
     .nice()
     .range([height - margin.bottom, margin.top]);
   
-  // Bars
+  // Bars with click interaction
   svg.selectAll(".bar")
     .data(data)
     .enter()
@@ -274,12 +315,32 @@ function updateCategoryChart() {
     .attr("y", d => y(d.count))
     .attr("width", x.bandwidth())
     .attr("height", d => height - margin.bottom - y(d.count))
-    .attr("fill", d => categoryColors[d.category])
-    .on("mouseover", function(event, d) {
-      showTooltip(event, `Category: ${d.category}<br>Count: ${d.count}`);
-      d3.select(this).style("opacity", 0.7);
+    .attr("fill", d => d.selected ? categoryColors[d.category] : "#bdc3c7")
+    .attr("stroke", d => d.selected ? "#2c3e50" : "none")
+    .attr("stroke-width", 2)
+    .style("cursor", "pointer")
+    .on("click", function(event, d) {
+      // Toggle category
+      if (selectedCategories.has(d.category)) {
+        selectedCategories.delete(d.category);
+      } else {
+        selectedCategories.add(d.category);
+      }
+      
+      console.log(`Clicked ${d.category}, now selected:`, Array.from(selectedCategories));
+      
+      // Update all visualizations
+      updateMap();
+      updateTimeline();
+      updateCategoryChart();
     })
-    .on("mouseout", function() {
+    .on("mouseover", function(event, d) {
+      showTooltip(event, `Category: ${d.category}<br>Count: ${d.count}<br><em>Click to ${d.selected ? 'hide' : 'show'}</em>`);
+      if (d.selected) {
+        d3.select(this).style("opacity", 0.7);
+      }
+    })
+    .on("mouseout", function(event, d) {
       hideTooltip();
       d3.select(this).style("opacity", 1);
     });
@@ -303,67 +364,7 @@ function updateCategoryChart() {
     .attr("x", -height / 2)
     .attr("y", 15)
     .attr("text-anchor", "middle")
-    .text("Number of Storms");
-}
-
-
-// INTERACTIVE CONTROLS
-
-function setupControls() {
-  // Year range sliders
-  const yearStart = d3.select("#yearStart");
-  const yearEnd = d3.select("#yearEnd");
-  const yearStartLabel = d3.select("#yearStartLabel");
-  const yearEndLabel = d3.select("#yearEndLabel");
-  
-  yearStart.on("input", function() {
-    yearStartLabel.text(this.value);
-    updateFilters();
-  });
-  
-  yearEnd.on("input", function() {
-    yearEndLabel.text(this.value);
-    updateFilters();
-  });
-  
-  // Category filters
-  d3.selectAll(".cat-filter").on("change", updateFilters);
-  
-  // Reset button
-  d3.select("#resetBtn").on("click", () => {
-    yearStart.property("value", 1950);
-    yearEnd.property("value", 2015);
-    yearStartLabel.text("1950");
-    yearEndLabel.text("2015");
-    d3.selectAll(".cat-filter").property("checked", true);
-    updateFilters();
-  });
-}
-
-function updateFilters() {
-  const yearStart = +d3.select("#yearStart").property("value");
-  const yearEnd = +d3.select("#yearEnd").property("value");
-  
-  const selectedCategories = [];
-  d3.selectAll(".cat-filter").each(function() {
-    if (this.checked) {
-      selectedCategories.push(this.value);
-    }
-  });
-  
-  // Filter hurricanes
-  filteredHurricanes = allHurricanes.filter(h => 
-    h.year >= yearStart && 
-    h.year <= yearEnd &&
-    selectedCategories.includes(h.category)
-  );
-  
-  console.log(`Filtered: ${filteredHurricanes.length} hurricanes`);
-  
-  // Update all visualizations
-  updateMap();
-  updateTimeline();
-  updateCategoryChart();
+    .text("Count");
 }
 
 
