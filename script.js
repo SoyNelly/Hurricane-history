@@ -1,4 +1,4 @@
-﻿// ATLANTIC HURRICANE VISUALIZATION DASHBOARD
+// ATLANTIC HURRICANE VISUALIZATION DASHBOARD
 
 
 // Global state
@@ -12,13 +12,13 @@ let selectedCategories = new Set(['TD', 'TS', 'Cat1', 'Cat2', 'Cat3', 'Cat4', 'C
 
 // Category colors
 const categoryColors = {
-  'TD': '#74b9ff',
-  'TS': '#0984e3',
-  'Cat1': '#fdcb6e',
-  'Cat2': '#e17055',
-  'Cat3': '#d63031',
-  'Cat4': '#a29bfe',
-  'Cat5': '#6c5ce7'
+  TD:   "#1b4f72",
+  TS:   "#117a65",
+  Cat1: "#9c640c",
+  Cat2: "#cb4335",
+  Cat3: "#7d3c98",
+  Cat4: "#34495e",
+  Cat5: "#5d0000"
 };
 
 const categoryOrder = ['TD', 'TS', 'Cat1', 'Cat2', 'Cat3', 'Cat4', 'Cat5'];
@@ -47,7 +47,6 @@ Promise.all([
 });
 
 // FILTER FUNCTION
-
 function getFilteredHurricanes() {
   return allHurricanes.filter(h => 
     h.year >= selectedYears[0] && 
@@ -73,9 +72,9 @@ function updateMap() {
   svg.attr("viewBox", `0 0 ${width} ${height}`);
   
   const projection = d3.geoMercator()
-    .center([-60, 25])
-    .scale(width / 4)
-    .translate([width / 2, height / 2]);
+  .center([-45, 25])
+  .scale(width / 0.5)
+  .translate([width / 2, height / 2]);
   
   const path = d3.geoPath().projection(projection);
   
