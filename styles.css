@@ -41,9 +41,10 @@ header h1 {
 
 .dashboard {
   display: grid;
-  grid-template-columns: 1.2fr 400px;
+  grid-template-columns: 1fr 380px;
   gap: 15px;
-  min-height: 600px;
+  min-height: 650px;
+  max-height: 750px;
 }
 
 .main-viz {
@@ -53,8 +54,8 @@ header h1 {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  min-height: 600px;
-  max-height: 650px;
+  min-height: 650px;
+  max-height: 750px;
 }
 
 .viz-header {
@@ -76,7 +77,8 @@ header h1 {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  min-height: 600px;
+  min-height: 650px;
+  max-height: 750px;
 }
 
 .viz-container {
@@ -86,7 +88,7 @@ header h1 {
   padding: 18px;
   display: flex;
   flex-direction: column;
-  min-height: 280px;
+  min-height: 300px;
   flex: 1;
 }
 
@@ -110,22 +112,22 @@ header h1 {
   background: #e8f4f8;
   display: block;
   border-radius: 4px;
-  min-height: 450px;
-  max-height: 550px;
+  min-height: 550px;
+  max-height: 650px;
 }
 
 #timeline {
   width: 100%;
   flex: 1;
   display: block;
-  min-height: 250px;
+  min-height: 280px;
 }
 
 #categoryChart {
   width: 100%;
   flex: 1;
   display: block;
-  min-height: 250px;
+  min-height: 280px;
 }
 
 .legend {

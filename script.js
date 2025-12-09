@@ -17,7 +17,7 @@ const categoryColors = {
   Cat1: "#9c640c",
   Cat2: "#cb4335",
   Cat3: "#7d3c98",
-  Cat4: "#34495e",
+  Cat4: "#e91e63",
   Cat5: "#5d0000"
 };
 
@@ -72,8 +72,8 @@ function updateMap() {
   svg.attr("viewBox", `0 0 ${width} ${height}`);
   
   const projection = d3.geoMercator()
-  .center([-45, 25])
-  .scale(width / 0.5)
+  .center([-60, 25])
+  .scale(width / 2.5)
   .translate([width / 2, height / 2]);
   
   const path = d3.geoPath().projection(projection);
